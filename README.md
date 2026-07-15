@@ -1,42 +1,41 @@
 # ⚖️ LLM-as-a-Judge
 
-用 LLM 当评委，自动评估 AI 生成代码的质量。支持多评委打分、一致性检验、评分校准。
+> **用 LLM 当评委，自动评估 AI 生成代码的质量** — 探索 AI 评估 AI 的方法论
 
-## 核心理念
+[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://python.org)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-传统的代码评估（运行测试用例）只能验证"对不对"，无法评估"好不好"。LLM-as-a-Judge 用多个 AI 模型充当评委，从多个维度评估代码质量，更接近人类开发者的判断。
+## 核心问题
 
-## ✨ 特性
+传统的代码评估只能验证"对不对"（运行测试用例），无法评估"好不好"。但"好代码"的定义是多维的——可读性、效率、健壮性、风格，这些测试用例覆盖不了。
 
-- **多评委机制** — 多个 LLM 独立打分，取加权平均
-- **多维度评估** — 正确性、可读性、效率、健壮性、代码风格
-- **一致性检验** — 计算评委间的一致性（ICC），低一致性时发出警告
-- **评分校准** — 用参考答案校准评委的评分标准
-- **评估报告** — 生成详细的评估报告，含统计分析
+**LLM-as-a-Judge** 用多个 AI 模型充当评委，从多个维度评估代码质量，更接近人类开发者的判断。
+
+## ✨ 核心特性
+
+- **多评委机制** — 多个 LLM 独立打分，取加权平均，减少单模型偏见
+- **5 维度评估** — 正确性 / 可读性 / 效率 / 健壮性 / 代码风格
+- **ICC 一致性检验** — 计算组内相关系数，量化评委间的一致程度
+- **评分校准** — 用参考答案校准评委评分标准，提高准确性
+- **评估报告** — 生成含统计分析的详细报告
 
 ## 🚀 快速开始
 
 ```bash
-pip install openai rich numpy
-
+pip install -r requirements.txt
 export OPENAI_API_KEY="sk-xxx"
 
-# 评估单段代码
+# 评估代码
 python judge.py --code "def fibonacci(n): ..." --task "实现斐波那契数列"
 
 # 多评委模式
 python judge.py --code "..." --judges gpt-4o,claude-sonnet-4-20250514 --task "..."
-
-# 批量评估
-python judge.py --input solutions.json --task "..."
 ```
 
 ## 📊 输出示例
 
 ```
 ⚖️ LLM-as-a-Judge 评估结果
-
-📋 任务: 实现 LRU 缓存
 
 评委评分:
 ┌─────────────┬──────┬──────┬──────┬──────┬──────┬──────┐
@@ -49,32 +48,12 @@ python judge.py --input solutions.json --task "..."
 📊 统计分析:
 - 加权平均分: 90.0
 - 评委一致性 (ICC): 0.89 (高一致性)
-- 各维度标准差: 正确=2.1, 可读=1.4, 效率=1.4, 健壮=2.1, 风格=2.1
-
-✅ 一致性检验: 通过 (ICC > 0.75)
-```
-
-## 🏗️ 项目结构
-
-```
-llm-as-judge/
-├── README.md
-├── judge.py               # 主程序
-├── judges/
-│   ├── __init__.py
-│   ├── base.py             # 评委基类
-│   └── code_judge.py       # 代码评估评委
-├── calibration/
-│   ├── __init__.py
-│   └── calibrator.py       # 评分校准
-└── reports/
-    └── .gitkeep
 ```
 
 ## 📐 评估维度
 
-| 维度 | 权重 | 说明 |
-|------|------|------|
+| 维度 | 权重 | 评估内容 |
+|------|------|----------|
 | 正确性 | 30% | 逻辑是否正确，是否满足需求 |
 | 可读性 | 20% | 命名、结构、注释是否清晰 |
 | 效率 | 20% | 时间/空间复杂度是否合理 |
@@ -83,4 +62,4 @@ llm-as-judge/
 
 ## License
 
-MIT
+MIT — 详见 [LICENSE](LICENSE)
